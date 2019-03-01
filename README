@@ -1,0 +1,25 @@
+		Dream engine
+INTRODUCTION
+[if you dont want to be bored start from the section ====ARCHITECTURE====]
+My name is... who cares))) The main idea is that here i will tell about my engine architecure
+Wryting an engyne is my deream of childhood. Since i was 23 years old - that long long time 
+ago when i was sadying in RWTH univercity, i was dreaming about wryting my own engine. All this
+sought about engine architectures, different functionality modules and communication subsystems 
+between them made my wet programming dreams about writing some hardcore system more and more wetter. 
+In this document i will make some notes  about the architecture and features my future engine. 
+If you will find some mistakes in the text or some weard statements about game enjines... Just skip it)
+However if you would like to contribute to this project - i will be wery happy to read your comments! 
+Enjoy the reading)))
+
+ACKNOWLEDGEMENTS
+Thanks to some youtube blogger who made an introductory video about game engines.
+
+====ARCHITECTURE====
+
+====FEATURE LIST====
+1. Debugging subsystem which will send debug or configuration messages to different modules, 
+which subsiquently call debugging/configuration functions iself.
+
+
+
+
