@@ -16,6 +16,30 @@ Thanks to some youtube blogger who made an introductory video about game engines
 
 ====ARCHITECTURE====
 
+====MODULES====
+1. Math Engine
+	- coordinate systems and their transformtion
+		1. Cartesian coordinates
+		2. Cylindrical coordinates
+		3. Spherical coordinates
+	- vector operations
+		1. Normalisation
+		2. Multiplication by scalar
+		3. Addition and substraction
+		4. Magnitude
+			a. square root of dot product
+			b. square root of sum of quadrats of coordinates
+		5. Calculate normal vector
+		6. Dot product
+			1. sum of mult of coordinates
+			2. |a| * |b| * cos(a,b)
+			
+		7. Cross product
+		8. Vector progection
+		9. Get angle between vectors
+		10. Linear interpolation
+		
+
 ====FEATURE LIST====
 1. Debugging subsystem which will send debug or configuration messages to different modules, 
 which subsiquently call debugging/configuration functions iself.
