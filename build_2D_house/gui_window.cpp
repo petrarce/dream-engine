@@ -27,6 +27,9 @@ opcode gui_window::init()
 		deinit();
 		return STATUS_NOK;
 	}
+	if(SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1") < 0){
+		pr_warn("cannot set VSync: %s\nConsider controll framerate manually", SDL_GetError());
+	}
 
 	this->window = SDL_CreateWindow(this->wind_name.c_str(), 
 										SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,

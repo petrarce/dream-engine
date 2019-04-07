@@ -58,8 +58,6 @@ objPosition object::get_obj_position() const
 				(get_vec_magn(origin)*get_vec_magn(rotated))
 	);
 
-	pr_dbg("angle=%.3f", angle);
-
 	objPosition thisPos = {
 		{	(int) position.get_x(),
 			(int) position.get_y()},
