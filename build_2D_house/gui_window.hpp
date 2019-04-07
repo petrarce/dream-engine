@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <SDL.h>
 
 using namespace std;
@@ -11,6 +12,7 @@ public:
 		SDL_Texture* texture;
 		SDL_Point textureSize;
 	} guiTextureContainer;
+	typedef pair<const string,guiTextureContainer> guiTextureHashPair;
 private:
 	size_t resolution_H;
 	size_t resolution_W;
@@ -19,13 +21,13 @@ private:
 
 	SDL_Renderer* renderer;
 	SDL_Window* window;
-	vector<guiTextureContainer> texture_list;
+	unordered_map<string, guiTextureContainer> texture_hash_map;
 public:
 	static gui_window* get_instance();
 	opcode init();
 	opcode deinit();
-	guiTextureIndex loadTexture( std::string path );
-	opcode render_texture(guiTextureIndex, const SDL_Point&, double);
+	opcode loadTexture( std::string path );
+	opcode render_texture(string, const SDL_Point&, double);
 	opcode render_scene();
 	opcode render_clear();
 	usrInp get_usr_input();

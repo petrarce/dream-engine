@@ -27,6 +27,11 @@ opcode object::update_state()
 	return STATUS_OK;
 }
 
+opcode object::clear_state(){
+	this->state = {0,0,0,0,0,0};
+	return STATUS_OK;
+}
+
 opcode object::dbg_print_all(const string& str) const
 {
 	int i = 0;
@@ -84,9 +89,21 @@ const matr3x2& object::get_world_matr() const
 	return this->world_matr;
 }
 
-object::object():
+objPosition object::get_position() const
+{
+	//dbg_print_all(string(this->texture_path));
+	return get_obj_position();
+}
+
+const string& object::get_texture_path() const
+{
+	return this->texture_path;
+}
+
+object::object(string str):
 	world_matr(0, {0,0}),
-	state({0,0,0,0,0,0,0})
+	state({0,0,0,0,0,0,0}),
+	texture_path(str)
 {
 	vect2d_h pt1(0, 0);
 	vect2d_h pt2(0, 1);
@@ -94,40 +111,4 @@ object::object():
 	this->points.push_back(pt2);
 }
 
-object::~object()
-{
-
-}
-
-objPosition roof::get_position() const
-{
-	//dbg_print_all(string("roof"));
-	return get_obj_position();
-}
-roof::roof()
-{
-	world_matr = matr3x2(0, {3*MOVE_UNIT, 4*MOVE_UNIT});
-}
-roof::~roof(){}
-
-objPosition door::get_position() const
-{
-	//dbg_print_all(string("door"));
-	return get_obj_position();
-}
-door::door()
-{
-	world_matr = matr3x2(0, {10*MOVE_UNIT, -3*MOVE_UNIT});
-}
-door::~door(){}
-
-objPosition wall::get_position() const
-{
-	//dbg_print_all(string("wall"));
-	return get_obj_position();
-}
-wall::wall()
-{
-	world_matr = matr3x2(0, {3*MOVE_UNIT, 2*MOVE_UNIT});
-}
-wall::~wall(){}
+object::~object(){}

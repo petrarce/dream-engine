@@ -60,11 +60,11 @@ opcode gui_window::init()
 
 opcode gui_window::deinit()
 {
-	for(guiTextureContainer& textrContainer : this->texture_list){
-		SDL_DestroyTexture(textrContainer.texture);
-		textrContainer.texture = NULL;
+	for(guiTextureHashPair& textrContainer : this->texture_hash_map){
+		SDL_DestroyTexture(textrContainer.second.texture);
+		textrContainer.second.texture = NULL;
 	}
-	this->texture_list.clear();
+	this->texture_hash_map.clear();
 
 	//Destroy window	
 	SDL_DestroyRenderer( this->renderer );
@@ -81,11 +81,15 @@ opcode gui_window::deinit()
 	return STATUS_OK;
 }
 
-gui_window::guiTextureIndex gui_window::loadTexture( std::string path )
+opcode gui_window::loadTexture( std::string path )
 {
 	if(this->is_initialised == false){
 		pr_err("cannot load texture before initialisation of SDL subsystems");
-		return 0;
+		return STATUS_NOK;
+	}
+	//texture is already present in hashmap (was loaded previously) 
+	if(this->texture_hash_map.find(path) != this->texture_hash_map.end()){
+		return STATUS_OK;
 	}
 	//The final texture
 	SDL_Texture* newTexture = NULL;
@@ -95,7 +99,7 @@ gui_window::guiTextureIndex gui_window::loadTexture( std::string path )
 	if( loadedSurface == NULL )
 	{
 		pr_err( "Unable to load image %s: %s\n", path.c_str(), IMG_GetError() );
-		return 0;
+		return STATUS_NOK;
 	}
 
 	//Create texture from surface pixels
@@ -103,27 +107,28 @@ gui_window::guiTextureIndex gui_window::loadTexture( std::string path )
 	if( newTexture == NULL )
 	{
 		pr_err( "Unable to create texture from %s: %s\n", path.c_str(), SDL_GetError() );
-		return 0;
+		return STATUS_NOK;
 	}
 
 	guiTextureContainer newGuiTexture = {newTexture, {loadedSurface->w, loadedSurface->h}};
+
 	//Get rid of old loaded surface
 	SDL_FreeSurface( loadedSurface );
 
-	this->texture_list.push_back(newGuiTexture);
-	return this->texture_list.size();
+	this->texture_hash_map.emplace(path, newGuiTexture);
+	return STATUS_OK;
 }
 
-opcode gui_window::render_texture(guiTextureIndex ind, 
+opcode gui_window::render_texture(string path, 
 									const SDL_Point& position, 
 									double rotation_angle)
 {
-	pr_err("posotion: {%d,%d}", position.x, position.y);
-	if(ind == 0 || ind > this->texture_list.size()){
-		pr_err("Invalid texture index:%d. Value should be > 0 and texture must be loaded before rendering it", (int)ind);
+	auto texture_iterator = this->texture_hash_map.find(path);
+	if(texture_iterator == this->texture_hash_map.end()){
+		pr_err("Texture %s was not loaded previously...", path.c_str());
 		return STATUS_NOK;
 	}
-	guiTextureContainer& txtrCont = this->texture_list[ind - 1];
+	guiTextureContainer& txtrCont = texture_iterator->second;
 	SDL_Rect txtrDstRect = {	position.x - txtrCont.textureSize.x/2, 
 								position.y - txtrCont.textureSize.y/2,
 								txtrCont.textureSize.x,

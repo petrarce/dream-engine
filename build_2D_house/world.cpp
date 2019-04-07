@@ -5,6 +5,7 @@
 using namespace std;
 opcode world::set_active_obj(worldObj obj_num)
 {
+	this->active_obj->clear_state();
 	this->active_obj = obj_list[obj_num];
 	return STATUS_OK;
 }
@@ -29,15 +30,21 @@ opcode world::update_acrive_object(usrInp& in)
 {
 	switch(in){
 		case SWIRCH_ROOF:
-		set_active_obj(ROOF);
+		if(obj_list[ROOF] != this->active_obj){
+			set_active_obj(ROOF);
+		}
 		break;
 
 		case SWITCH_DOOR:
-		set_active_obj(DOOR);
+		if(obj_list[DOOR] != this->active_obj){
+			set_active_obj(DOOR);
+		}
 		break;
 
 		case SWITCH_WALL:
-		set_active_obj(WALL);
+		if(obj_list[WALL] != this->active_obj){
+			set_active_obj(WALL);
+		}
 		break;
 
 		case ROTATE_LEFT:
@@ -111,7 +118,7 @@ opcode world::deploy_renderer()
 	gui_window::guiTextureIndex i = 1;
 	for(const object* obj : obj_list){
 		objPosition pos = obj->get_position();
-		gui.render_texture(i++, SDL_Point({pos.pos.x, pos.pos.y}), pos.angle);
+		gui.render_texture(obj->get_texture_path(), SDL_Point({pos.pos.x, pos.pos.y}), pos.angle);
 	}
 	return STATUS_OK;
 }
@@ -121,10 +128,10 @@ opcode world::init()
 
 	gui_window& gui = *gui_window::get_instance();
 	
-	roof* roof_obj = new roof();
-	door* door_obj = new door();
-	wall* wall_obj = new wall();
-	wall* arrow_obj = new wall();
+	object* roof_obj = new object("./roof.png");
+	object* wall_obj = new object("./wall.png");
+	object* door_obj = new object("./door.png");
+	object* arrow_obj = new object("./arrow.png");
 
 	this->active_obj = roof_obj;
 	this->arrow_obj = arrow_obj;
@@ -134,10 +141,10 @@ opcode world::init()
 	obj_list.push_back(arrow_obj);
 
 
-	gui.loadTexture("./roof.png");
-	gui.loadTexture("./wall.png");
-	gui.loadTexture("./door.png");
-	gui.loadTexture("./arrow.png");
+	gui.loadTexture(roof_obj->get_texture_path());
+	gui.loadTexture(door_obj->get_texture_path());
+	gui.loadTexture(wall_obj->get_texture_path());
+	gui.loadTexture(arrow_obj->get_texture_path());
 
 	return STATUS_OK;
 }
